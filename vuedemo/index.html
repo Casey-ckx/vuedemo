@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet/less" type="text/css" href="index.less" />
+    <script src="//cdnjs.cloudflare.com/ajax/libs/less.js/2.5.3/less.min.js"></script>
+    <title>计算器</title>
+</head>
+<body>
+    <div class="Calculator">
+    <!-- <input type="text" v-model="Calculator_num0" @keydown.enter="inputnum">
+    <input type="text" v-show="Calculator_num1" v-model="Calculator_num1">
+    <input type="text" v-show="Calculator_num2" v-model="Calculator_num1"> -->
+    <div class="ouput_num">
+        <div class="input_num" v-show="inuputnum">
+            {{inuputnum}}
+        </div>
+        <div class="input_num" v-show="result">
+                {{result}}
+            </div>
+        <div class="">
+
+        </div>
+    </div>
+    <div class="c_bun">
+        <div class="c_bun_are1">
+            <div class="Symbol2">
+                <div v-for="n of Symbol2" @click="Symbol_sy(n)">{{n}}</div>
+            </div>
+            <div class="number">
+                <div v-for="n of number" @click="number1(n)">{{n}}</div>
+            </div>
+        </div>
+        <div class="c_bun_are2">
+            <div v-for="n of Symbol" @click="Symbol_sy(n)">{{n}}</div>     
+        </div>
+    </div>
+    </div>
+</body>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script>
+    var Calculator=new Vue({
+        el:".Calculator",
+        data:{
+            Symbol:["÷","×","-","+","="],//运算符号
+            Symbol2:["C","+/-","%"],//修改数字
+            number:["7","8","9","4","5","6","1","2","3","0","."],
+            inuputnum:"0",
+            Calculator_num0:0,//这个是做运算的第一个数字
+            Calculator_num1:0,//这个是做运算的第一个数字
+            operator:"",
+            inputtime:0,//做一个状态判断 0输入第一个数 1输入第二个数
+            Calculator_num2:0,//这个是做运算的第二个数字
+            result:"",
+        },
+        methods:{//做一个输入第一个数和第二个数的判断
+            inputnum:function(){
+                if(this.inputtime===0){
+                    this.Calculator_num1=this.inuputnum;
+                    this.inputtime++;
+                }else if(this.inputtime===1){
+                    this.Calculator_num2=this.inuputnum;
+                    this.inputtime--;
+                }
+                this.inuputnum="0";
+            },
+            clear:function(){
+                this.inuputnum="0";
+                this.operator="";
+                this.Calculator_num1=0;
+                this.Calculator_num2=0;
+                this.result="";
+            },
+            appenadd:function(){
+                console.log(2);
+                var add="-";
+                if(this.inuputnum[0]=="0"){
+                    return ;//如果第一个为0就不进行了
+                }
+                if(this.inuputnum[0]=="-"){
+                    this.inuputnum=this.inuputnum.substr(1)
+                }else{
+                    this.inuputnum=add+this.inuputnum;
+                }
+
+            },
+            outputnum:function(){
+                // var result="";
+                // console.log(this.Calculator_num1);
+                // console.log(this.Calculator_num2);
+                this.result=this.Calculator_num1+this.operator+this.Calculator_num2;
+                this.result=eval(this.result);
+                this.result+="";
+                if(this.result[0]==0)               
+                this.result = this.result.substr(1)//删除前置0
+            },
+            Symbol2_sy:function(n){
+                console.log(n)
+            },
+            number1:function(n){
+                if(this.inuputnum[0]==0)               
+                this.inuputnum = this.inuputnum.substr(1)//删除前置0
+                this.inuputnum+=n
+            },
+            Symbol_sy:function(n){
+                switch (n) {
+                    case "÷":
+                        this.operator="/";
+                        this.inputnum();
+                        break;
+                    case "×":
+                        this.operator="*";
+                        this.inputnum();
+                        break;
+                    case "-":
+                        this.operator="-";
+                        this.inputnum();
+                        break;
+                    case "+":
+                        this.operator="+";
+                        this.inputnum();
+                        break;
+                    case "=":
+                        this.inputnum();
+                        this.outputnum();
+                        break
+                    case "C":
+                        this.clear();
+                        break
+                    case "%":
+                        this.operator="%";
+                        this.inputnum();
+                        break  
+                    case "+/-":
+                        this.appenadd();//加个减号
+                        break      
+                    default:
+                    alert("输错了东西啦");
+                        break;
+                }
+            }
+        }
+    })
+    </script>
+</html>
